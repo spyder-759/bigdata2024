@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Data Computing Quiz</title>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #1976d2;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        header p {
+            margin: 5px 0 0;
+            color: #555;
+            font-size: 1rem;
+        }
+        .week-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .week-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 20px;
+            background-color: #e0e0e0;
+            color: #555;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .week-btn:hover {
+            background-color: #d5d5d5;
+        }
+        .week-btn.active {
+            background-color: #1976d2;
+            color: #ffffff;
+        }
+        #quiz-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .question-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 24px 24px 24px 20px;
+            border-left: 6px solid #1976d2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .options-list li {
+            margin-bottom: 12px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .option-label:hover {
+            background-color: #f9f9f9;
+            border-color: #ccc;
+        }
+        .option-label input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #aaa;
+            border-radius: 50%;
+            outline: none;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .option-label input[type="radio"]:checked {
+            border-color: #1976d2;
+            background-color: #1976d2;
+            background-clip: content-box;
+            padding: 4px;
+        }
+        .option-label.correct {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        .option-label.correct input[type="radio"] {
+            border-color: #4caf50;
+        }
+        .option-label.correct input[type="radio"]:checked {
+            background-color: #4caf50;
+            border-color: #4caf50;
+        }
+        .option-label.incorrect {
+            background-color: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+            font-weight: 500;
+        }
+        .option-label.incorrect input[type="radio"] {
+            border-color: #f44336;
+        }
+        .option-label.incorrect input[type="radio"]:checked {
+            background-color: #f44336;
+            border-color: #f44336;
+        }
+        .explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 16px 16px 16px 12px;
+            background-color: #f8f8f8;
+            border-left: 6px solid #1976d2;
+            border-radius: 4px;
+        }
+        .explanation.visible {
+            display: block;
+        }
+        .explanation-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+            margin: 0 0 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Big Data Computing</h1>
+        <p>Question & Answer Platform - NPTEL Course</p>
+    </header>
+
+    <nav class="week-navigation">
+        <button class="week-btn active" data-week="1">Week 1</button>
+        <button class="week-btn" data-week="2">Week 2</button>
+        <button class="week-btn" data-week="3">Week 3</button>
+        <button class="week-btn" data-week="4">Week 4</button>
+        <button class="week-btn" data-week="5">Week 5</button>
+        <button class="week-btn" data-week="6">Week 6</button>
+        <button class="week-btn" data-week="7">Week 7</button>
+        <button class="week-btn" data-week="8">Week 8</button>
+    </nav>
+
+    <main id="quiz-container">
+        </main>
+
+
+    <script>
+        // --- ALL 8 WEEKS OF QUIZ DATA ---
+        const allQuizData = [
+            // --- WEEK 1 ---
+            {
+                week: 1,
+                question: "1. Which of the following best describes Big Data?",
+                options: [
+                    "Data that is physically large in size",
+                    "Data that is collected from multiple sources and is of high variety, volume, and velocity",
+                    "Data that requires specialized hardware for storage",
+                    "Data that is highly structured and easily analyzable"
+                ],
+                answer: "Data that is collected from multiple sources and is of high variety, volume, and velocity",
+                explanation: "This answer correctly identifies the three core V's (Volume, Velocity, Variety) that define Big Data."
+            },
+            {
+                week: 1,
+                question: "2. What technology is commonly used for processing and analyzing Big Data in distributed computing environments?",
+                options: ["MySQL", "Hadoop", "Excel", "SQLite"],
+                answer: "Hadoop",
+                explanation: "Hadoop is the foundational open-source framework for distributed storage (HDFS) and processing (MapReduce) of Big Data."
+            },
+            {
+                week: 1,
+                question: "3. What is a primary limitation of traditional RDBMS when dealing with Big Data?",
+                options: [
+                    "They cannot handle structured data",
+                    "They are too expensive to implement",
+                    "They struggle with scaling to manage very large datasets",
+                    "They are not capable of performing complex queries"
+                ],
+                answer: "They struggle with scaling to manage very large datasets",
+                explanation: "Traditional relational databases are built to scale 'up' (more power on one machine), not 'out' (across many machines), which is required for Big Data volume."
+            },
+            {
+                week: 1,
+                question: "4. Which component of Hadoop is responsible for distributed storage?",
+                options: ["YARN", "HDFS", "MapReduce", "Pig"],
+                answer: "HDFS",
+                explanation: "HDFS stands for Hadoop Distributed File System. It's the storage layer of Hadoop."
+            },
+            {
+                week: 1,
+                question: "5. Which Hadoop ecosystem tool is primarily used for querying and analyzing large datasets stored in Hadoop's distributed storage?",
+                options: ["HBase", "Hive", "Kafka", "Sqoop"],
+                answer: "Hive",
+                explanation: "Apache Hive provides a SQL-like interface (HiveQL) to query data stored in HDFS."
+            },
+            {
+                week: 1,
+                question: "6. Which YARN component is responsible for coordinating the execution of tasks within containers on individual nodes in a Hadoop cluster?",
+                options: ["NodeManager", "ResourceManager", "ApplicationMaster", "DataNode"],
+                answer: "NodeManager",
+                explanation: "The NodeManager runs on each worker node, managing containers and reporting resource usage to the ResourceManager."
+            },
+            {
+                week: 1,
+                question: "7. What is the primary advantage of using Apache Spark over traditional MapReduce for data processing?",
+                options: ["Better fault tolerance", "Lower hardware requirements", "Real-time data processing", "Faster data processing"],
+                answer: "Faster data processing",
+                explanation: "Spark performs operations in-memory, which is significantly faster than MapReduce's disk-based approach."
+            },
+            {
+                week: 1,
+                question: "8. What is Apache Spark Streaming primarily used for?",
+                options: ["Real-time data visualization", "Batch processing of large datasets", "Real-time stream processing", "Data storage and retrieval"],
+                answer: "Real-time stream processing",
+                explanation: "Spark Streaming ingests data in mini-batches, allowing for near real-time processing of data streams."
+            },
+            {
+                week: 1,
+                question: "9. Which operation in Apache Spark GraphX is used to perform triangle counting on a graph?",
+                options: ["connectedComponents", "triangleCount", "shortestPaths", "pageRank"],
+                answer: "triangleCount",
+                explanation: "The `triangleCount` operation is a standard graph algorithm in GraphX used to find clusters and measure network density."
+            },
+            {
+                week: 1,
+                question: "10. Which component in Hadoop is responsible for executing tasks on individual nodes and reporting back to the JobTracker?",
+                options: ["HDFS Namenode", "TaskTracker", "YARN ResourceManager", "DataNode"],
+                answer: "TaskTracker",
+                explanation: "In the older Hadoop 1 (MapReduce 1), the TaskTracker ran on each node to execute Map and Reduce tasks assigned by the JobTracker."
+            },
+            // --- WEEK 2 ---
+            {
+                week: 2,
+                question: "1. Which statement best describes the data storage model used by HBase?",
+                options: ["Key-value pairs", "Document-oriented", "Column-family", "Relational tables"],
+                answer: "Column-family",
+                explanation: "HBase is a NoSQL database that stores data in column-families rather than traditional rows, allowing for flexible and sparse data storage."
+            },
+            {
+                week: 2,
+                question: "2. What is Apache Avro primarily used for in the context of Big Data?",
+                options: ["Real-time data streaming", "Data serialization", "Machine learning", "Database management"],
+                answer: "Data serialization",
+                explanation: "Avro is a data serialization system used for compact, fast, binary data exchange, especially in Hadoop and Kafka."
+            },
+            {
+                week: 2,
+                question: "3. Which component in HDFS is responsible for storing actual data blocks on the DataNodes?",
+                options: ["NameNode", "DataNode", "Secondary NameNode", "ResourceManager"],
+                answer: "DataNode",
+                explanation: "DataNodes store the actual data blocks, while the NameNode stores the metadata (information about where blocks are located)."
+            },
+            {
+                week: 2,
+                question: "4. Which feature of HDFS ensures fault tolerance by replicating data blocks across multiple DataNodes?",
+                options: ["Partitioning", "Compression", "Replication", "Encryption"],
+                answer: "Replication",
+                explanation: "By default, HDFS replicates each data block 3 times across different nodes to ensure data is not lost if a node fails."
+            },
+            {
+                week: 2,
+                question: "5. Which component in MapReduce is responsible for sorting and grouping the intermediate key-value pairs before passing them to the Reducer?",
+                options: ["Mapper", "Reducer", "Partitioner", "Combiner"],
+                answer: "Partitioner",
+                explanation: "The Partitioner determines which reducer will receive a specific key-value pair, ensuring all data for the same key goes to the same reducer."
+            },
+            {
+                week: 2,
+                question: "6. What is the default replication factor in Hadoop Distributed File System (HDFS)?",
+                options: ["1", "2", "3", "4"],
+                answer: "3",
+                explanation: "HDFS defaults to storing 3 copies of each data block for fault tolerance."
+            },
+            {
+                week: 2,
+                question: "7. What does the job of a Hadoop Shuffle Reducer?",
+                options: ["Sorting input data", "Transforming intermediate data", "Aggregating results", "Splitting input data"],
+                answer: "Aggregating results",
+                explanation: "The Reducer's job is to process the grouped data from the shuffle phase, performing operations like summing, counting, or aggregating results."
+            },
+            {
+                week: 2,
+                question: "8. Which task can be efficiently parallelized using MapReduce?",
+                options: ["Real-time sensor data processing", "Single-row database queries", "Image rendering", "Log file analysis"],
+                answer: "Log file analysis",
+                explanation: "Log file analysis is a 'pleasantly parallel' task where large files can be split, processed by many Mappers simultaneously (e.g., counting errors), and then aggregated."
+            },
+            {
+                week: 2,
+                question: "9. Which MapReduce application involves counting the occurrence of words in a large corpus of text?",
+                options: ["PageRank algorithm", "K-means clustering", "Word count", "Recommender system"],
+                answer: "Word count",
+                explanation: "Word count is the classic 'Hello, World!' example for MapReduce, demonstrating the map (emit word, 1) and reduce (sum counts) phases."
+            },
+            {
+                week: 2,
+                question: "10. What does reversing a web link graph typically involve?",
+                options: ["Removing dead links from the graph", "Inverting the direction of edges", "Adding new links to the graph", "Sorting links based on page rank"],
+                answer: "Inverting the direction of edges",
+                explanation: "Reversing a graph (e.g., from 'page A links to page B' to 'page B is linked by page A') is a common operation in graph analysis, such as for the PageRank algorithm."
+            },
+            // --- WEEK 3 ---
+            {
+                week: 3,
+                question: "1. Which abstraction in Apache Spark allows for parallel execution and distributed data processing?",
+                options: ["DataFrame", "RDD (Resilient Distributed Dataset)", "Dataset", "Spark SQL"],
+                answer: "RDD (Resilient Distributed Dataset)",
+                explanation: "RDDs are the fundamental, fault-tolerant data structure in Spark, allowing for distributed, parallel processing on a cluster."
+            },
+            {
+                week: 3,
+                question: "2. What component resides on top of Spark Core?",
+                options: ["Spark Streaming", "Spark SQL", "RDDs", "None of the above"],
+                answer: "None of the above",
+                explanation: "This is a bit of a trick question. Spark SQL and Spark Streaming are libraries built *on top* of Spark Core. RDDs are the central data abstraction *within* Spark Core itself, not on top of it."
+            },
+            {
+                week: 3,
+                question: "3. Which statements about Cassandra and its Snitches are correct? (Statement 1: Hinted handoff... Statement 2: Ec2Snitch...)",
+                options: ["Only Statement 1 is correct.", "Only Statement 2 is correct.", "Both Statement 1 and Statement 2 are correct.", "Neither Statement 1 nor Statement 2 is correct."],
+                answer: "Both Statement 1 and Statement 2 are correct.",
+                explanation: "Statement 1 correctly describes hinted handoff for temporary replica failure. Statement 2 correctly describes the Ec2Snitch's use in AWS for mapping EC2 regions/zones to data centers/racks."
+            },
+            {
+                week: 3,
+                question: "4. Which of the following is a module for Structured data processing?",
+                options: ["GraphX", "MLib", "Spark SQL", "Spark R"],
+                answer: "Spark SQL",
+                explanation: "Spark SQL is the module specifically designed to work with structured and semi-structured data, using DataFrames and Datasets."
+            },
+            {
+                week: 3,
+                question: "5. A healthcare provider wants to store and query patient records in a NoSQL database with high write throughput and low latency access. Which technology is most suitable?",
+                options: ["Apache Hadoop", "Apache Spark", "Apache HBase", "Apache Pig"],
+                answer: "Apache HBase",
+                explanation: "HBase is a NoSQL column-family database built on HDFS, designed for extremely high write throughput and low-latency random reads, making it ideal for this use case."
+            },
+            {
+                week: 3,
+                question: "6. The primary Machine Learning API for Spark is now the ______ based API.",
+                options: ["DataFrame", "DataFrame-based", "Dataset", "All of the above"],
+                answer: "DataFrame-based",
+                explanation: "Spark's MLlib library has shifted from the original RDD-based API to a more user-friendly and optimized DataFrame-based API for building ML pipelines."
+            },
+            {
+                week: 3,
+                question: "7. How does Apache Spark compare to Hadoop MapReduce?",
+                options: [
+                    "Apache Spark is up to 10 times faster in memory and up to 100 times faster on disk.",
+                    "Apache Spark is up to 100 times faster in memory and up to 10 times faster on disk.",
+                    "Apache Spark is up to 10 times faster both in memory and on disk compared to Hadoop MapReduce.",
+                    "Apache Spark is up to 100 times faster both in memory and on disk compared to Hadoop MapReduce."
+                ],
+                answer: "Apache Spark is up to 100 times faster in memory and up to 10 times faster on disk.",
+                explanation: "Spark's in-memory processing provides a massive speedup (up to 100x) over MapReduce's disk-based operations. It's also faster on disk (up to 10x) due to its more efficient execution engine."
+            },
+            {
+                week: 3,
+                question: "8. Which DAG action in Apache Spark triggers the execution and returns the count of elements?",
+                options: ["collect()", "count()", "take()", "first()"],
+                answer: "count()",
+                explanation: "`count()` is an 'action' operation. When called, it triggers the execution of all precedent 'transformation' operations (the DAG) to compute and return the total number of elements."
+            },
+            {
+                week: 3,
+                question: "9. What is Apache Spark Streaming primarily used for?",
+                options: ["Real-time processing of streaming data", "Batch processing of static datasets", "Machine learning model training", "Graph processing"],
+                answer: "Real-time processing of streaming data",
+                explanation: "Spark Streaming (and its successor, Structured Streaming) is designed to process continuous streams of data in near real-time."
+            },
+            {
+                week: 3,
+                question: "10. Which of the following represents the smallest unit of data processed by Apache Spark Streaming?",
+                options: ["Batch", "Window", "Micro-batch", "Record"],
+                answer: "Micro-batch",
+                explanation: "The original Spark Streaming (DStream API) operates by collecting stream data into small 'micro-batches' and processing them as small RDDs."
+            },
+            // --- WEEK 4 ---
+            {
+                week: 4,
+                question: "1. Which of the following statements about Bloom filters is true?",
+                options: [
+                    "Bloom filters guarantee no false negatives",
+                    "Bloom filters use cryptographic hashing functions",
+                    "Bloom filters may produce false positives but no false negatives",
+                    "Bloom filters are primarily used for sorting large datasets"
+                ],
+                answer: "Bloom filters may produce false positives but no false negatives",
+                explanation: "A Bloom filter is a probabilistic data structure. It can incorrectly say an item *is* in the set (false positive), but it will *never* incorrectly say an item is *not* in the set when it is (no false negatives)."
+            },
+            {
+                week: 4,
+                question: "2. How does CAP theorem impact the design of distributed systems?",
+                options: [
+                    "It emphasizes data accuracy over system availability",
+                    "It requires trade-off between consistency, availability, and partition tolerance",
+                    "It prioritizes system performance over data security",
+                    "It eliminates the need for fault tolerance measures"
+                ],
+                answer: "It requires trade-off between consistency, availability, and partition tolerance",
+                explanation: "The CAP theorem states a distributed system can only provide two of these three guarantees: Consistency, Availability, and Partition Tolerance."
+            },
+            {
+                week: 4,
+                question: "3. Which guarantee does the CAP theorem consider as mandatory for a distributed system?",
+                options: ["Consistency", "Availability", "Partition tolerance", "Latency tolerance"],
+                answer: "Partition tolerance",
+                explanation: "In modern distributed systems, network partitions (failures) are considered inevitable. Therefore, systems must tolerate them, forcing a trade-off between Consistency (C) and Availability (A)."
+            },
+            {
+                week: 4,
+                question: "4. What consistency level in Apache Cassandra ensures a write is acknowledged only after it is written to all replicas?",
+                options: ["ONE", "LOCAL_ONE", "LOCAL_QUORUM", "ALL"],
+                answer: "ALL",
+                explanation: "Consistency level 'ALL' provides the strongest consistency guarantee but has the highest latency and lowest availability, as it requires all replica nodes to respond."
+            },
+            {
+                week: 4,
+                question: "5. How does Zookeeper contribute to maintaining consistency in distributed systems?",
+                options: ["By managing data replication", "By providing a centralized configuration service", "By ensuring data encryption", "By optimizing data storage"],
+                answer: "By providing a centralized configuration service",
+                explanation: "Zookeeper acts as a centralized coordination and configuration service, providing a consistent view of system state, leader election, and configuration data to all nodes."
+            },
+            {
+                week: 4,
+                question: "6. A ______ server is a machine that keeps a copy of the state of the entire system and persists this information in local log files.",
+                options: ["Master", "Region", "Zookeeper", "All of the mentioned"],
+                answer: "Zookeeper",
+                explanation: "This describes the role of a Zookeeper server within its ensemble, maintaining a consistent, replicated state machine."
+            },
+            {
+                week: 4,
+                question: "7. What is Apache Zookeeper primarily used for in Big Data ecosystems?",
+                options: ["Data storage", "Data processing", "Configuration management", "Data visualization"],
+                answer: "Configuration management",
+                explanation: "Zookeeper is a coordination service, not a data storage or processing service. It's used for managing cluster configuration, leader election, service discovery, etc."
+            },
+            {
+                week: 4,
+                question: "8. Which statement correctly describes CQL (Cassandra Query Language)?",
+                options: [
+                    "CQL is a SQL-like language used for querying relational databases",
+                    "CQL is a procedural programming language used for writing stored procedures in Cassandra",
+                    "CQL is a language used for creating and managing tables and querying data in Apache Cassandra",
+                    "CQL is a scripting language used for data transformation tasks in Cassandra"
+                ],
+                answer: "CQL is a language used for creating and managing tables and querying data in Apache Cassandra",
+                explanation: "CQL provides a familiar SQL-like syntax for interacting with Cassandra's column-family data model."
+            },
+            {
+                week: 4,
+                question: "9. Which aspect of CAP theorem refers to a system's ability to continue operating despite network failures?",
+                options: ["Consistency", "Accessibility", "Partition tolerance", "Atomicity"],
+                answer: "Partition tolerance",
+                explanation: "Partition tolerance is the 'P' in CAP. It means the system continues to function even when communication between nodes (a network partition) is lost."
+            },
+            {
+                week: 4,
+                question: "10. Why are tombstones used in distributed databases like Apache Cassandra?",
+                options: [
+                    "To mark nodes that are temporarily unavailable",
+                    "To mark data that is stored in multiple replicas",
+                    "To mark data that has been logically deleted",
+                    "To mark data that is actively being updated"
+                ],
+                answer: "To mark data that has been logically deleted",
+                explanation: "Cassandra uses an append-only model. To delete, it writes a 'tombstone' marker. This marker replicates to other nodes, indicating the data should be considered deleted and eventually purged during compaction."
+            },
+            // --- WEEK 5 ---
+            {
+                week: 5,
+                question: "1. What distributed graph processing framework operates on top of Spark?",
+                options: ["MLlib", "GraphX", "Spark streaming", "ALL"],
+                answer: "GraphX",
+                explanation: "GraphX is the specific Spark API/library for graph and graph-parallel computation."
+            },
+            {
+                week: 5,
+                question: "2. Which framework is best suited for fast, in-memory data processing and supports advanced analytics like machine learning and graph processing?",
+                options: ["Apache Hadoop MapReduce", "Apache Flink", "Apache Storm", "Apache Spark"],
+                answer: "Apache Spark",
+                explanation: "Spark's core design around in-memory processing (using RDDs/DataFrames) makes it ideal for iterative algorithms found in machine learning (MLlib) and graph processing (GraphX)."
+            },
+            {
+                week: 5,
+                question: "3. A financial institution needs to analyze historical stock market data to predict market trends. Which framework is best suited?",
+                options: ["Apache Spark", "Apache Storm", "Hadoop MapReduce", "Apache Flume"],
+                answer: "Apache Spark",
+                explanation: "This task involves complex analytics (prediction, trend analysis) on large historical datasets, which is a perfect use case for Spark and its MLlib library."
+            },
+            {
+                week: 5,
+                question: "4. A telecommunications company needs to process real-time call logs to detect network anomalies. Which combination is appropriate?",
+                options: [
+                    "Apache Hadoop and Apache Pig",
+                    "Apache Kafka and Apache HBase",
+                    "Apache Spark and Apache Hive",
+                    "Apache Storm and Apache Pig"
+                ],
+                answer: "Apache Kafka and Apache HBase",
+                explanation: "Kafka is a high-throughput, real-time streaming platform (for the call logs), and HBase is a low-latency NoSQL database (for storing/querying anomaly data) that can handle high write volumes."
+            },
+            {
+                week: 5,
+                question: "5. Do many people use Kafka as a substitute for which type of solution?",
+                options: ["log aggregation", "compaction", "collection", "all of the mentioned"],
+                answer: "all of the mentioned",
+                explanation: "Kafka's publish-subscribe model and persistent log make it an excellent replacement for traditional log aggregation systems (like Flume), and it also handles collection and compaction of data streams."
+            },
+            {
+                week: 5,
+                question: "6. Which feature of Resilient Distributed Datasets (RDDs) in Apache Spark contributes to their fault tolerance?",
+                options: ["DAG (Directed Acyclic Graph)", "In-memory computation", "Lazy-evaluation", "Lineage information"],
+                answer: "Lineage information",
+                explanation: "RDDs store 'lineage' (the list of transformations used to build them). If a partition is lost, Spark can use this lineage to recompute *only* that lost partition, providing fault tolerance."
+            },
+            {
+                week: 5,
+                question: "7. Point out the correct statement.",
+                options: [
+                    "Hadoop do need specialized hardware to process the data",
+                    "Hadoop allows live stream processing of real-time data",
+                    "In the Hadoop mapreduce programming framework output files are divided into lines or records",
+                    "None of the mentioned"
+                ],
+                answer: "In the Hadoop mapreduce programming framework output files are divided into lines or records",
+                explanation: "This is correct. Hadoop MapReduce typically processes input data line-by-line or record-by-record. (A is wrong, Hadoop uses commodity hardware. B is wrong, Hadoop is for batch, not streaming)."
+            },
+            {
+                week: 5,
+                question: "8. Which of the following statements about Apache Pig is true?",
+                options: [
+                    "Pig Latin scripts are compiled into HiveQL for execution.",
+                    "Pig is primarily used for real-time stream processing.",
+                    "Pig Latin provides a procedural data flow language for ETL tasks.",
+                    "Pig uses a schema-on-write approach for data storage."
+                ],
+                answer: "Pig Latin provides a procedural data flow language for ETL tasks.",
+                explanation: "Pig and its Pig Latin language are high-level data flow tools designed to simplify writing complex MapReduce jobs, making them ideal for ETL (Extract, Transform, Load) pipelines."
+            },
+            {
+                week: 5,
+                question: "9. An educational institution wants to analyze student performance data stored in HDFS and generate personalized learning recommendations. Which components should be used?",
+                options: [
+                    "Apache HBase for storing student data and Apache Pig for processing.",
+                    "Apache Kafka for data streaming and Apache Storm for real-time analytics.",
+                    "Hadoop MapReduce for batch processing and Apache Hive for querying.",
+                    "Apache Spark for data processing and Apache Hadoop for storage."
+                ],
+                answer: "Apache Spark for data processing and Apache Hadoop for storage.",
+                explanation: "Hadoop (HDFS) is the storage layer. Spark (with MLlib) is the best tool for the processing and machine learning (recommendations) part of this task."
+            },
+            {
+                week: 5,
+                question: "10. A company is analyzing customer behavior across multiple channels (web, mobile, social media) to personalize marketing campaigns. Which technology is best suited?",
+                options: ["Hadoop MapReduce", "Apache Kafka", "Apache Spark", "Apache Hive"],
+                answer: "Apache Spark",
+                explanation: "This requires integrating diverse data (variety) and performing complex analytics (personalization), a task at which Spark (using Spark SQL and MLlib) excels."
+            },
+            // --- WEEK 6 ---
+            {
+                week: 6,
+                question: "1. Point out the wrong statement.",
+                options: [
+                    "Replication Factor can be configured at a cluster level (Default is set to 3) and also at a file level",
+                    "Block Report from each DataNode contains a list of all the blocks that are stored on that DataNode",
+                    "DataNode is aware of the files to which the blocks stored on it belong to"
+                ],
+                answer: "DataNode is aware of the files to which the blocks stored on it belong to",
+                explanation: "This is incorrect. The DataNode only stores blocks as meaningless chunks of data. It's the NameNode that maintains all the metadata, mapping filenames to their corresponding blocks and locations."
+            },
+            {
+                week: 6,
+                question: "2. What is the primary technique used by Random Forest to reduce overfitting?",
+                options: ["Boosting", "Bagging", "Pruning", "Neural networks"],
+                answer: "Bagging",
+                explanation: "Random Forest is an ensemble method that uses Bagging (Bootstrap Aggregating). It builds many decision trees on different random subsets of data and averages their results to reduce variance and prevent overfitting."
+            },
+            {
+                week: 6,
+                question: "3. What statements accurately describe Random Forest and Gradient Boosting ensemble methods? (S1, S2, S3, S4)",
+                options: ["S1 and S2", "S2 and S4", "S3 and S4", "S1 and S4"],
+                answer: "S1 and S4",
+                explanation: "Without seeing S1-S4, this answer is based on the provided file. Typically, key differences are: Random Forest builds trees in parallel (Bagging), while Gradient Boosting builds them sequentially (Boosting)."
+            },
+            {
+                week: 6,
+                question: "4. In the context of K-means clustering with MapReduce, what role does the Map phase play?",
+                options: [
+                    "It reduces the size of the dataset by removing duplicates",
+                    "It distributes the computation of distances between data points and centroids across multiple nodes",
+                    "It initializes multiple sets of centroids to improve clustering accuracy",
+                    "It performs principal component analysis (PCA) on the data"
+                ],
+                answer: "It distributes the computation of distances between data points and centroids across multiple nodes",
+                explanation: "In a K-means MapReduce job, each Mapper takes a chunk of data points, calculates the distance to each centroid, and emits the closest centroid as the key and the data point as the value."
+            },
+            {
+                week: 6,
+                question: "5. What is a common method to improve the performance of the K-means algorithm when dealing with large-scale datasets in a MapReduce environment?",
+                options: ["Using hierarchical clustering before K-means", "Reducing the number of clusters", "Employing mini-batch K-means", "Increasing the number of centroids"],
+                answer: "Employing mini-batch K-means",
+                explanation: "Mini-batch K-means uses small, random subsets of the data (mini-batches) in each iteration, which significantly speeds up convergence on very large datasets compared to using the full dataset."
+            },
+            {
+                week: 6,
+                question: "6. Which similarity measure is often used to determine the similarity between two text documents by considering the angle between their vector representations?",
+                options: ["Manhattan Distance", "Cosine Similarity", "Jaccard Similarity", "Hamming Distance"],
+                answer: "Cosine Similarity",
+                explanation: "Cosine Similarity measures the cosine of the angle between two vectors (e.g., TF-IDF vectors for documents). It's effective for text because it compares orientation (content) regardless of magnitude (document length)."
+            },
+            {
+                week: 6,
+                question: "7. Which distance measure calculates the distance along strictly horizontal and vertical paths, consisting of segments along the axes?",
+                options: ["Minkowski distance", "Cosine similarity", "Manhattan distance", "Euclidean distance"],
+                answer: "Manhattan distance",
+                explanation: "Also known as 'city block distance,' Manhattan distance is the sum of the absolute differences of the coordinates. It's like walking around city blocks, unable to cut diagonally."
+            },
+            {
+                week: 6,
+                question: "8. What is the purpose of a validation set in machine learning?",
+                options: [
+                    "To train the model on unseen data",
+                    "To evaluate the model's performance on the training data",
+                    "To tune hyperparameters and prevent overfitting",
+                    "To test the final model's performance"
+                ],
+                answer: "To tune hyperparameters and prevent overfitting",
+                explanation: "The validation set is used to 'tune' parameters (e.g., learning rate, number of trees). The model's performance on this set guides adjustments, helping find the best settings without 'contaminating' the final test set."
+            },
+            {
+                week: 6,
+                question: "9. In K-fold cross-validation, what is the purpose of splitting the dataset into K folds?",
+                options: [
+                    "To ensure that every data point is used for training only once",
+                    "To train the model on all the data points",
+                    "To test the model on the same data multiple times",
+                    "To evaluate the model's performance on different subsets of data"
+                ],
+                answer: "To evaluate the model's performance on different subsets of data",
+                explanation: "K-fold cross-validation trains and tests the model K times, using a different fold for testing each time. This gives a more robust estimate of the model's performance on unseen data."
+            },
+            {
+                week: 6,
+                question: "10. Which of the following steps is NOT typically part of the machine learning process?",
+                options: ["Data Collection", "Model Training", "Model Enjoyment", "Data Encryption"],
+                answer: "Model Enjoyment",
+                explanation: "While one might 'enjoy' a good model, 'Model Enjoyment' is not a formal step. 'Data Encryption' might be part of data handling, but 'Model Enjoyment' is not part of the process. (Note: The file also listed Data Encryption, but Model Enjoyment is the clearer non-step)."
+            },
+            // --- WEEK 7 ---
+            {
+                week: 7,
+                question: "1. What is the primary purpose of using a decision tree in regression tasks within big data environments?",
+                options: [
+                    "To classify data into distinct categories",
+                    "To predict continuous values based on input features",
+                    "To reduce the dimensionality of the dataset",
+                    "To perform clustering of similar data points"
+                ],
+                answer: "To predict continuous values based on input features",
+                explanation: "Regression models (like regression trees) predict continuous values (e.g., price, temperature). Classification models predict discrete categories (e.g., 'yes'/'no', 'cat'/'dog')."
+            },
+            {
+                week: 7,
+                question: "2. Which statement accurately explains the function of bootstrapping within the random forest algorithm?",
+                options: [
+                    "Bootstrapping creates additional features to augment the dataset for improved random forest performance.",
+                    "Bootstrapping is not used in the random forest algorithm, it is only employed in decision tree construction.",
+                    "Bootstrapping produces replicas of the dataset by random sampling with replacement, which is essential for the random forest algorithm.",
+                    "Bootstrapping generates replicas of the dataset without replacement, ensuring diversity in the random forest."
+                ],
+                answer: "Bootstrapping produces replicas of the dataset by random sampling with replacement, which is essential for the random forest algorithm.",
+                explanation: "Bootstrapping is 'random sampling with replacement.' This is the 'Bootstrap' part of 'Bootstrap Aggregating' (Bagging), the core technique of Random Forest."
+            },
+            {
+                week: 7,
+                question: "3. In a big data scenario using MapReduce, how is the decision tree model typically built?",
+                options: [
+                    "By using a single-node system to fit the model",
+                    "By distributing the data and computations across multiple nodes for parallel processing",
+                    "By manually sorting data before applying decision tree algorithms",
+                    "By using in-memory processing on a single machine"
+                ],
+                answer: "By distributing the data and computations across multiple nodes for parallel processing",
+                explanation: "Building a decision tree (finding the best splits) is computationally expensive. MapReduce allows this computation (e.g., calculating impurity for all features) to be parallelized across many nodes."
+            },
+            {
+                week: 7,
+                question: "4. In Apache Spark, what is the primary purpose of using cross-validation in machine learning pipelines?",
+                options: [
+                    "To reduce the number of features used in the model",
+                    "To evaluate the models' performance by partitioning the data into training and validation sets multiple times",
+                    "To speed up the data preprocessing phase",
+                    "To increase the size of the training dataset by generating synthetic samples"
+                ],
+                answer: "To evaluate the models' performance by partitioning the data into training and validation sets multiple times",
+                explanation: "Cross-validation (like K-fold) provides a robust way to evaluate a model (or a set of hyperparameters) by training and testing on multiple, different splits of the data."
+            },
+            {
+                week: 7,
+                question: "5. How does gradient boosting in machine learning conceptually resemble gradient descent in optimization theory?",
+                options: [
+                    "Both techniques use large step sizes to quickly converge to a minimum",
+                    "Both methods involve iteratively adjusting model parameters based on the gradient to minimize a loss function",
+                    "Both methods rely on random sampling to update the model",
+                    "Both techniques use a fixed learning rate to ensure convergence without overfitting"
+                ],
+                answer: "Both methods involve iteratively adjusting model parameters based on the gradient to minimize a loss function",
+                explanation: "Gradient Boosting sequentially adds new models (e.g., trees) that correct the errors (the 'gradient' of the loss function) of the previous models, effectively descending the gradient of the overall loss."
+            },
+            {
+                week: 7,
+                question: "6. Which statement accurately describes one of the benefits of decision trees?",
+                options: [
+                    "Decision trees always outperform other models in predictive accuracy, regardless of the complexity of the dataset.",
+                    "Decision trees can automatically handle feature interactions by combining different features within a single tree, but a single tree's predictive power is often limited.",
+                    "Decision trees cannot handle large datasets and are not computationally scalable.",
+                    "Decision trees require a fixed set of features and cannot adapt to new feature interactions during training."
+                ],
+                answer: "Decision trees can automatically handle feature interactions by combining different features within a single tree, but a single tree's predictive power is often limited.",
+                explanation: "This is a key trade-off: they are good at finding interactions (e.g., 'if feature A > 5 AND feature B < 10'), but a single tree can easily overfit and often has lower predictive power than an ensemble (like a Random Forest)."
+            },
+            {
+                week: 7,
+                question: "7. What has driven the development of specialized graph computation engines capable of inferring complex recursive properties of graph structured data?",
+                options: [
+                    "Increasing demand for social media analytics",
+                    "Advances in machine learning algorithms",
+                    "Growing scale and importance of graph data",
+                    "Expansion of blockchain technology"
+                ],
+                answer: "Growing scale and importance of graph data",
+                explanation: "The rise of massive graphs (like social networks, web links, protein interactions) has driven the need for new tools (like GraphX, Pregel) specifically designed for graph-parallel computation."
+            },
+            {
+                week: 7,
+                question: "8. Which of these statements accurately describes bagging in the context of understanding the random forest algorithm?",
+                options: [
+                    "Bagging is primarily used to average predictions of decision trees in the random forest algorithm.",
+                    "Bagging is a technique exclusively designed for reducing the bias in predictions made by decision trees.",
+                    "Bagging, short for Bootstrap Aggregation, is a general method for averaging predictions of various algorithms, not limited to decision trees, and it works well in reducing the variance of predictions.",
+                    "Bagging is a method specifically tailored for improving the interpretability of decision trees in the random forest algorithm."
+                ],
+                answer: "Bagging, short for Bootstrap Aggregation, is a general method for averaging predictions of various algorithms, not limited to decision trees, and it works well in reducing the variance of predictions.",
+                explanation: "This is the most complete definition. Bagging is a general technique (not just for trees) that reduces variance (not bias) by training models on bootstrapped samples and aggregating their outputs."
+            },
+            {
+                week: 7,
+                question: "9. What is a key advantage of using regression trees in a big data environment when combined with MapReduce?",
+                options: [
+                    "They require less computational power compared to other algorithms",
+                    "They can handle both classification and regression tasks effectively",
+                    "They automatically handle large-scale datasets by leveraging distributed processing",
+                    "They eliminate the need for data preprocessing"
+                ],
+                answer: "They automatically handle large-scale datasets by leveraging distributed processing",
+                explanation: "The process of building a tree (finding the best splits) can be parallelized, making it suitable for distributed frameworks like MapReduce or Spark to handle very large datasets."
+            },
+            {
+                week: 7,
+                question: "10. When implementing a regression decision tree using MapReduce, which technique helps in managing the data that needs to be split across different nodes?",
+                options: ["Feature scaling", "Data shuffling", "Data partitioning", "Model pruning"],
+                answer: "Data partitioning",
+                explanation: "Data partitioning is the fundamental step of distributing the dataset across the different nodes in the cluster so that each Map task can process its own portion."
+            },
+            // --- WEEK 8 ---
+            {
+                week: 8,
+                question: "1. Which statement accurately describes the functionality of a Parameter Server in distributed machine learning?",
+                options: [
+                    "The Parameter Server handles data preprocessing by scaling features and normalizing values before training.",
+                    "The Parameter Server distributes a model over multiple machines and provides two main operations: Pull (to query parts of the model) and Push (to update parts of the model).",
+                    "The Parameter Server exclusively supports model training using (Stochastic) gradient descent and does not handle other machine learning algorithms.",
+                    "The Parameter Server uses the Collapsed Gibbs Sampling method to update model parameters by aggregating push updates via subtraction."
+                ],
+                answer: "The Parameter Server distributes a model over multiple machines and provides two main operations: Pull (to query parts of the model) and Push (to update parts of the model).",
+                explanation: "This is the core definition of the Parameter Server architecture. Servers hold the model parameters, and Workers 'pull' the current parameters and 'push' updates (gradients) back."
+            },
+            {
+                week: 8,
+                question: "2. Why is PageRank considered important in the context of information retrieval on the World Wide Web?",
+                options: [
+                    "It helps to categorize web pages based on the quality of their content, thus improving the accuracy of search results.",
+                    "It provides an objective and mechanical method for rating the importance of web pages based on the link structure of the web, addressing challenges of page relevance amidst a large number of web pages.",
+                    "It ensures that all web pages are indexed equally, regardless of their content or link structure.",
+                    "It automatically filters out irrelevant web pages by analyzing their content and metadata."
+                ],
+                answer: "It provides an objective and mechanical method for rating the importance of web pages based on the link structure of the web, addressing challenges of page relevance amidst a large number of web pages.",
+                explanation: "PageRank's innovation was to determine a page's importance based on *who* links to it (and how important *those* pages are), not just its own content."
+            },
+            {
+                week: 8,
+                question: "3. What role does the outerJoinVertices() operator serve in Apache Spark's GraphX?",
+                options: [
+                    "It removes all vertices that are not present in the input RDD.",
+                    "It returns a new graph with only the vertices from the input RDD.",
+                    "It joins the input RDD data with vertices and includes all vertices, whether present in the input RDD or not.",
+                    "It creates a subgraph from the input RDD and vertices."
+                ],
+                answer: "It joins the input RDD data with vertices and includes all vertices, whether present in the input RDD or not.",
+                explanation: "Like a SQL 'OUTER JOIN', `outerJoinVertices` keeps all vertices in the original graph, joining new data from an RDD where a match is found, and often using a default value for vertices with no match."
+            },
+            {
+                week: 8,
+                question: "4. Which statement accurately describes a key feature of GraphX, a component built on top of Apache Spark Core?",
+                options: [
+                    "GraphX focuses exclusively on performing machine learning tasks and does not support graph processing.",
+                    "GraphX allows for efficient graph processing and analysis, supports high-level graph measures like triangle counting, and integrates the Pregel API for graph traversal.",
+                    "GraphX is primarily used for data ingestion and preprocessing and does not provide functionalities for graph algorithms or analytics.",
+                    "GraphX provides only basic graph visualization capabilities and does not include algorithms like PageRank or triangle counting."
+                ],
+                answer: "GraphX allows for efficient graph processing and analysis, supports high-level graph measures like triangle counting, and integrates the Pregel API for graph traversal.",
+                explanation: "This correctly summarizes GraphX's capabilities as a comprehensive graph processing library on Spark."
+            },
+            {
+                week: 8,
+                question: "5. Why are substantial indexes and data reuse important in graph processing?",
+                options: [
+                    "To create decorative elements within graphs.",
+                    "To save memory and processing resources by reusing routing tables and edge adjacency information.",
+                    "To add redundancy to graphs for fault tolerance.",
+                    "To increase the file size of graphs for better storage."
+                ],
+                answer: "To save memory and processing resources by reusing routing tables and edge adjacency information.",
+                explanation: "Graph algorithms are often iterative (like PageRank). Efficiently storing and reusing graph structures (like adjacency lists or indexes) in memory is critical for performance, saving redundant computation."
+            },
+            {
+                week: 8,
+                question: "6. Which statement is true regarding operators in Apache Spark's GraphX?",
+                options: [
+                    "Join operators add data to graphs and produce new graphs.",
+                    "Structural operators operate on the structure of an input graph and produce a new graph.",
+                    "Property operators modify vertex/edge properties and produce a new graph.",
+                    "Both Structural and Property operators modify the graph and produce a new graph."
+                ],
+                answer: "Both Structural and Property operators modify the graph and produce a new graph.",
+                explanation: "Both `Structural operators` (like `subgraph`) and `Property operators` (like `mapVertices`) create new graphs based on the old one, leveraging RDD lineage for efficiency. (Note: Adapted from a 'select all' question in the source file)."
+            },
+            {
+                week: 8,
+                question: "7. Which RDD operator would you use to combine two RDDs by aligning their keys and producing a new RDD with tuples of corresponding values?",
+                options: ["union", "join", "sample", "partitionBy"],
+                answer: "join",
+                explanation: "A `join` operation on two key-value RDDs (e.g., `(K, V)` and `(K, W)`) results in a new RDD of `(K, (V, W))` for all keys present in both."
+            },
+            {
+                week: 8,
+                question: "8. Which of the following is a primary benefit of using graph-based methods in data mining and machine learning?",
+                options: [
+                    "Reducing the dimensionality of the data",
+                    "Identifying influential people and information and finding communities",
+                    "Improving the speed of data retrieval from databases",
+                    "Enhancing the accuracy of linear regression models"
+                ],
+                answer: "Identifying influential people and information and finding communities",
+                explanation: "Graph analysis excels at understanding relationships. This allows for tasks like finding 'influencers' (centrality analysis, like PageRank) and 'communities' (cluster analysis, like Triangle Counting)."
+            },
+            {
+                week: 8,
+                question: "9. Which of the following accurately describes a strategy used to optimize graph computations in distributed systems?",
+                options: [
+                    "Recasting graph systems optimizations as distributed join optimization and incremental materialized maintenance",
+                    "Developing graphs as simple arrays and using linear algebra operations",
+                    "Expressing graph computation in sequential algorithms and optimizing with single-node processing",
+                    "Implementing graph algorithms using recursive function calls and minimizing parallelism"
+                ],
+                answer: "Recasting graph systems optimizations as distributed join optimization and incremental materialized maintenance",
+                explanation: "Many graph operations can be expressed as a series of joins (e.g., joining vertex data with edge data). Optimizing these joins is a key strategy for optimizing the overall graph computation."
+            },
+            {
+                week: 8,
+                question: "10. What are the defining traits of a Parameter Server in distributed machine learning? (S1: Distributes a model... S2: It offers Pull and Push operations...)",
+                options: ["Only S1 is true.", "Only S2 is true.", "Both S1 and S2 are true.", "Neither S1 nor S2 is true."],
+                answer: "Both S1 and S2 are true.",
+                explanation: "Both statements are correct and define the Parameter Server model: it distributes the model (S1) and provides the Push/Pull mechanism for workers to interact with it (S2)."
+            }
+        ];
+
+        // --- Get Elements ---
+        const quizContainer = document.getElementById('quiz-container');
+        const weekNav = document.querySelector('.week-navigation');
+
+        // --- Main Function to Load Quiz ---
+        function loadQuiz(weekNumber) {
+            // Clear previous questions
+            quizContainer.innerHTML = '';
+
+            // Filter questions for the selected week
+            const weekQuestions = allQuizData.filter(item => item.week === weekNumber);
+
+            // Loop through each question for that week
+            weekQuestions.forEach((data, questionIndex) => {
+                
+                // Create the question card
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+
+                // Add the question text
+                const questionText = document.createElement('p');
+                questionText.className = 'question-text';
+                questionText.textContent = data.question;
+                questionCard.appendChild(questionText);
+
+                // Create the list of options
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options-list';
+                const questionName = `w${weekNumber}-q${questionIndex}`;
+
+                // Create each option
+                data.options.forEach((option, optionIndex) => {
+                    const optionItem = document.createElement('li');
+                    const optionId = `${questionName}-opt${optionIndex}`;
+                    
+                    const optionLabel = document.createElement('label');
+                    optionLabel.className = 'option-label';
+                    optionLabel.htmlFor = optionId;
+
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = questionName;
+                    radioInput.id = optionId;
+                    radioInput.value = option;
+
+                    const optionText = document.createElement('span');
+                    optionText.textContent = option;
+
+                    radioInput.addEventListener('click', () => {
+                        checkAnswer(questionName, data.answer, explanationBox);
+                    });
+
+                    optionLabel.appendChild(radioInput);
+                    optionLabel.appendChild(optionText);
+                    optionItem.appendChild(optionLabel);
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionCard.appendChild(optionsList);
+
+                // Create the explanation box (hidden)
+                const explanationBox = document.createElement('div');
+                explanationBox.className = 'explanation';
+                
+                const explanationTitle = document.createElement('p');
+                explanationTitle.className = 'explanation-title';
+                explanationTitle.textContent = 'Explanation:';
+                
+                const explanationText = document.createElement('p');
+                explanationText.textContent = data.explanation;
+                
+                explanationBox.appendChild(explanationTitle);
+                explanationBox.appendChild(explanationText);
+                questionCard.appendChild(explanationBox);
+
+                // Add the complete card to the container
+                quizContainer.appendChild(questionCard);
+            });
+        }
+
+        // --- Function to Check Answer ---
+        function checkAnswer(questionName, correctAnswer, explanationBox) {
+            const allOptions = document.getElementsByName(questionName);
+
+            allOptions.forEach(option => {
+                const label = option.closest('.option-label');
+                option.disabled = true; // Disable all options
+
+                if (option.value === correctAnswer) {
+                    label.classList.add('correct');
+                } 
+                else if (option.checked) {
+                    label.classList.add('incorrect');
+                }
+            });
+            explanationBox.classList.add('visible'); // Show explanation
+        }
+
+        // --- Event Listener for Week Buttons ---
+        weekNav.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                // Remove 'active' from all buttons
+                weekNav.querySelectorAll('.week-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add 'active' to the clicked button
+                e.target.classList.add('active');
+                
+                // Load the quiz for the corresponding week
+                const weekNumber = parseInt(e.target.dataset.week, 10);
+                loadQuiz(weekNumber);
+            }
+        });
+
+        // --- Initial Load ---
+        // Load Week 1 by default when the page opens
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuiz(1);
+        });
+    </script>
+</body>
+</html>
